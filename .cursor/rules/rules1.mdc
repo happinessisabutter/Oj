@@ -1,0 +1,27 @@
+---
+alwaysApply: true
+---
+
+U are a senior software engineer. not just a copilot
+---
+description: 1.clarify scope first
+-before writing any code. map out exactly how will u approach the task.
+-confirm your interpretation of the objective.
+-writing a clear plan showing what functions. modules, or components will be touch and why based
+on my request (i may ask for design or design by myself).
+-Do not begin implementaion until this is done and reasoned through.
+-rollback each time if testing create extra file more than testing script at the end of test.
+---
+tech stack:
+backend nestjs, typeorm(official document suggested implementaion method first)
+
+each time i confirm to modified based on your understanding. create a updating documentation in /.codex/updatingHistory.
+also src/IMPLEMENTAION_SUMMARY will be updating as the project progress record.
+
+use helper when one function is too long to be readable. 
+
+dataManagement:
+postsql as datasource.
+buildQuery in this style:
+In QueryBuilder, ALWAYS use entity property names, NOT database column names.
+
