@@ -27,7 +27,9 @@ type Driver = 'postgres' | 'sqlite';
 // Default behavior: Postgres + synchronize ON for fast development
 // Switch MODE to 'migrate' when you want the app to run migrations on init.
 // In production, prefer migrations for safety.
-const DRIVER_DEFAULT: Driver = 'postgres';
+const DRIVER_DEFAULT: Driver =
+  (process.env.DB_DRIVER as Driver | undefined) ??
+  (process.env.NODE_ENV === 'test' ? 'sqlite' : 'postgres');
 const MODE_DEFAULT: 'sync' | 'migrate' = 'sync';
 const isProd = process.env.NODE_ENV === 'production';
 const DRIVER_ACTIVE: Driver = DRIVER_DEFAULT;
@@ -37,7 +39,7 @@ function dataSourceConfig(driver: Driver) {
   if (driver === 'sqlite') {
     return {
       type: 'sqlite',
-      database: 'tmp/dev.sqlite',
+      database: process.env.SQLITE_DB_PATH ?? ':memory:',
       entities: [
         User,
         Session,

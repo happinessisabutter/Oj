@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { ArrayNotEmpty, IsArray, IsInt, IsString } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsInt, IsOptional, IsString } from 'class-validator';
 
 export class AttachQuizProblemsDto {
   @IsArray()
@@ -37,6 +37,7 @@ export class QuizProblemDisplayItem {
   @IsInt()
   quizProblemId!: number;
 
+  @IsOptional()
   @IsString()
-  displayId!: string;
+  displayId?: string;
 }

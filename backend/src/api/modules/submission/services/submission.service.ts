@@ -8,7 +8,7 @@ import { CreateSubmissionDto } from '../dto/create-submission.dto';
 import { SubmissionListQueryDto } from '../dto/submission-list-query.dto';
 import { SUBMISSION_DISPATCHER } from '../../../../port/queue/judge-queue.port';
 import type { SubmissionDispatcherPort } from '../../../../port/queue/judge-queue.port';
-import { JudgeTaskPayload } from '../../../../judgeWorkers/judge/judge.types';
+import { JudgeTaskPayload } from '../../../../judgeWorkers/judge/dto/judgeTaskPlayload';
 
 /** Handles submission persistence and queue dispatch responsibilities. */
 @Injectable()

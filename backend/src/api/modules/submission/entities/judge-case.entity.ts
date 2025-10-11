@@ -10,6 +10,7 @@ import {
 import { User } from '../../user/entities/user.entity';
 import { Problem } from '../../problem/entities/problem.entity';
 import { Judge } from './judge.entity';
+import { JudgeStatus } from './judge.entity';
 
 /**
  * JudgeCase entity represents a single test case result for a submission.
@@ -45,8 +46,11 @@ export class JudgeCase {
   @JoinColumn({ name: 'userId', referencedColumnName: 'userId' })
   user!: User;
 
-  @Column({ type: 'varchar' })
-  status!: string;
+  /**
+   * 
+   */
+  @Column({ type: 'int', enum: JudgeStatus })
+  status!: JudgeStatus;
 
   @Column({ type: 'int', nullable: true })
   time!: number | null;

@@ -1,8 +1,11 @@
 import { InjectionToken } from '@nestjs/common';
-import { JudgeTaskPayload } from '../../judgeWorkers/judge/judge.types';
+import { JudgeTaskPayload } from '../../../judgeWorkers/judge/dto/judgeTaskPlayload';
 
 export type JudgeQueueHandler = (payload: JudgeTaskPayload) => Promise<void>;
 
+/**
+ * producer + consumer port
+ */
 export interface SubmissionDispatcherPort {
   dispatch(payload: JudgeTaskPayload): Promise<void>;
 }

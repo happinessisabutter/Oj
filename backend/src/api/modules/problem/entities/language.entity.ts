@@ -8,6 +8,7 @@ import {
 
 @Entity({ name: 'languages' })
 export class Language {
+  // show cases allowed input ids from external api like Judge0
   @PrimaryGeneratedColumn({ type: 'int' })
   id!: number;
 

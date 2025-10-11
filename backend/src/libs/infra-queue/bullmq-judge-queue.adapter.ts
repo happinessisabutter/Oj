@@ -10,16 +10,16 @@ import {
   JudgeQueueHandler,
   SUBMISSION_DISPATCHER,//producer
   SubmissionDispatcherPort,
-} from '../../port/queue/judge-queue.port';
-import { JudgeTaskPayload } from '../../judgeWorkers/judge/judge.types';
+} from '../../common/port/queue/judge-queue.port';
+import { JudgeTaskPayload } from '../../judgeWorkers/judge/dto/judgeTaskPlayload';
 
 const QUEUE_NAME = 'judge';
 const JOB_NAME = 'dispatch-judge-task';
 const LOG_FILE = 'judge-queue-errors.log';
 
 @Injectable()
-export class BullMqSubmissionDispatcher implements SubmissionDispatcherPort {
-  private readonly logger = new Logger(BullMqSubmissionDispatcher.name);
+export class bullmqSubmissionDispatcher implements SubmissionDispatcherPort {
+  private readonly logger = new Logger(bullmqSubmissionDispatcher.name);
 
   constructor(@InjectQueue(QUEUE_NAME) private readonly queue: Queue<JudgeTaskPayload>) {}
 
@@ -31,10 +31,14 @@ export class BullMqSubmissionDispatcher implements SubmissionDispatcherPort {
     this.logger.log(`Queued submission ${payload.submissionId}`);
   }
 }
-
+/**
+ * @description BullMQ-based implementation of the JudgeQueueConsumerPort.
+ * manages ack/fail, retries,
+ * backoff, concurrency, rate limiting, progress events, etc.
+ */
 @Injectable()
-export class BullMqJudgeConsumer implements JudgeQueueConsumerPort {
-  private readonly logger = new Logger(BullMqJudgeConsumer.name);
+export class bullmqJudgeConsumer implements JudgeQueueConsumerPort {
+  private readonly logger = new Logger(bullmqJudgeConsumer.name);
   private worker?: Worker<JudgeTaskPayload>;
 
   constructor(@InjectQueue(QUEUE_NAME) private readonly queue: Queue<JudgeTaskPayload>) {}
@@ -61,7 +65,7 @@ export class BullMqJudgeConsumer implements JudgeQueueConsumerPort {
     this.worker.on('failed', async (job: Job<JudgeTaskPayload> | undefined, err: Error) => {
       const message = `Judge job ${job?.id ?? 'unknown'} failed: ${err?.message ?? 'unknown error'}`;
       this.logger.error(message);
-      await this.persistFailureLog(message, err?.stack);
+      //await this.persistFailureLog(message, err?.stack);
     });
   }
 
@@ -75,6 +79,12 @@ export class BullMqJudgeConsumer implements JudgeQueueConsumerPort {
     this.logger.log('Judge worker stopped');
   }
 
+  /**
+   * Persists the failure log for a judge job.
+   * @param message The error message to log.
+   * @param stack The error stack trace to log.
+   * @returns A promise that resolves when the log has been persisted.
+   */
   private async persistFailureLog(message: string, stack?: string): Promise<void> {
     if (process.env.NODE_ENV === 'test') {
       // Skip file logging in automated tests to avoid brittle assertions.
@@ -93,7 +103,7 @@ export class BullMqJudgeConsumer implements JudgeQueueConsumerPort {
   }
 }
 
-export const queueProviders = [
-  { provide: SUBMISSION_DISPATCHER, useExisting: BullMqSubmissionDispatcher },
-  { provide: JUDGE_QUEUE_CONSUMER_PORT, useExisting: BullMqJudgeConsumer },
+export const bullmqJudgeQueueProviders = [
+  { provide: SUBMISSION_DISPATCHER, useExisting: bullmqSubmissionDispatcher },
+  { provide: JUDGE_QUEUE_CONSUMER_PORT, useExisting: bullmqJudgeConsumer },
 ];

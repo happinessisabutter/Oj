@@ -1,13 +1,16 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { JUDGE_QUEUE_CONSUMER_PORT } from '../../port/queue/judge-queue.port';
-import type { JudgeQueueConsumerPort } from '../../port/queue/judge-queue.port';
-import { JUDGE_COMMAND_PORT } from '../../port/judge/judge-command.port';
-import type { JudgeCommandPort } from '../../port/judge/judge-command.port';
-import { JudgeTaskPayload } from './judge.types';
+import { JUDGE_QUEUE_CONSUMER_PORT } from '../../common/port/queue/judge-queue.port';
+import type { JudgeQueueConsumerPort } from '../../common/port/queue/judge-queue.port';
+import { JUDGE_COMMAND_PORT } from '../port/judge-command.port';
+import type { JudgeCommandPort } from '../port/judge-command.port';
+import { JudgeTaskPayload } from '../judge/dto/judgeTaskPlayload';
 
+/**
+ * judge abstration class
+ */
 @Injectable()
-export class JudgeLoop {
-  private readonly logger = new Logger(JudgeLoop.name);
+export class JudgeRunner {
+  private readonly logger = new Logger(JudgeRunner.name);
   private started = false;
 
   constructor(
@@ -15,13 +18,14 @@ export class JudgeLoop {
     private readonly queueConsumer: JudgeQueueConsumerPort,
     @Inject(JUDGE_COMMAND_PORT)
     private readonly judgeCommand: JudgeCommandPort,
+    
   ) {}
 
   async start(): Promise<void> {
     if (this.started) {
       return;
     }
-
+    // start consuming from the queue
     await this.queueConsumer.start(async (payload: JudgeTaskPayload) => {
       try {
         await this.judgeCommand.process(payload);
