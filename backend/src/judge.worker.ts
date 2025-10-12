@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
-import { JudgeWorkerModule } from './judge/judge-worker.module';
-import { JudgeRunner } from './judge/judge.runner';
+import { JudgeWorkerModule } from './judgeWorkers/judge/judge-worker.module';
+import { JudgeRunner } from './judgeWorkers/judge/judge.runner';
 
 async function bootstrap() {
   const appContext = await NestFactory.createApplicationContext(

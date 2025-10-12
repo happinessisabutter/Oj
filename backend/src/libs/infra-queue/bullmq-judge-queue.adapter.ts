@@ -10,7 +10,7 @@ import {
   JudgeQueueHandler,
   SUBMISSION_DISPATCHER,//producer
   SubmissionDispatcherPort,
-} from '../../common/port/queue/judge-queue.port';
+} from './judge-queue.port';
 import { JudgeTaskPayload } from '../../judgeWorkers/judge/dto/judgeTaskPlayload';
 
 const QUEUE_NAME = 'judge';

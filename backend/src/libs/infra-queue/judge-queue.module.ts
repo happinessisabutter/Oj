@@ -3,7 +3,7 @@ import { BullModule } from '@nestjs/bullmq';
 import {
   JUDGE_QUEUE_CONSUMER_PORT,
   SUBMISSION_DISPATCHER,
-} from '../../common/port/queue/judge-queue.port';
+} from './judge-queue.port';
 import {
   bullmqJudgeConsumer,
   bullmqJudgeQueueProviders,

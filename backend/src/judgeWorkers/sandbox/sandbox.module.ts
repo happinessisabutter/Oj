@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
-import { SANDBOX_PORT } from 'src/judgeWorkers/sandbox/Sandbox.port';
-import { Judge0Adapter } from './judge0.adapter';
+import { SANDBOX_PORT } from 'src/judgeWorkers/sandbox/port/Sandbox.port';
+import { Judge0Adapter } from './adapter/judge0.adapter';
 
 @Module({
   imports: [

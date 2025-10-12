@@ -1,5 +1,5 @@
 import { InjectionToken } from '@nestjs/common';
-import { JudgeTaskPayload } from '../../../judgeWorkers/judge/dto/judgeTaskPlayload';
+import { JudgeTaskPayload } from '../../judgeWorkers/judge/model/judgeTaskPlayload';
 
 export type JudgeQueueHandler = (payload: JudgeTaskPayload) => Promise<void>;
 
